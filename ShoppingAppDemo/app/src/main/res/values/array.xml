@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="categories">
+        <item> Grocery Items </item>
+        <item> Food Items </item>
+    </array>
+
+    <array name="food_items">
+        <item> Vegetarian </item>
+        <item> Non Vegetarian </item>
+    </array>
+
+    <array name="abc">
+        <item> Grocery Items </item>
+        <item> Food Items </item>
+        <item> Vegetarian </item>
+        <item> Non Vegetarian </item>
+        <item> Grocery Items </item>
+        <item> Food Items </item>
+        <item> Vegetarian </item>
+        <item> Non Vegetarian </item>
+        <item> Grocery Items </item>
+        <item> Food Items </item>
+        <item> Vegetarian </item>
+        <item> Non Vegetarian </item>
+    </array>
+</resources>
