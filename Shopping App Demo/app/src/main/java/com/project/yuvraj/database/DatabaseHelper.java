@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.project.yuvraj.parsing.Address;
 import com.project.yuvraj.parsing.Cart;
 import com.project.yuvraj.parsing.Details;
 
@@ -38,6 +39,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_PRICE = "price";
     private static final String COL_QUANTITY = "quantity";
 
+    //Table for Address
+    private static final String TABLE_NAME_ADDRESS = "tbaddress";
+    private static final String COL_ASL = "sl";
+    private static final String COL_AID = "id";
+    private static final String COL_ANAME = "name";
+    private static final String COL_PIN = "pincode";
+    private static final String COL_ADDRESS = "address";
+    private static final String COL_LANDMARK = "landmark";
+    private static final String COL_CITY = "city";
+    private static final String COL_STATE = "state";
+    private static final String COL_PHONE = "phone";
+    private static final String COL_EMAIL = "email";
+
 
     SQLiteDatabase db;
 
@@ -49,7 +63,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Create table Orders
     private static final String TABLE_ORDER = "create table orders (sl integer primary key not null ,id not null ," +
-            "url text not null,name text not null, price text not null, quantity text not null);";
+            "url text not null, name text not null, price text not null, quantity text not null);";
+
+    //Create table address
+    private static final String TABLE_ADDRESS = "create table tbaddress (sl integer primary key not null ,id not null ," +
+            "name text not null, pincode text not null, address text not null, landmark text not null, city text not null, " +
+            "state text not null, phone text not null, email text not null);";
 
 
     public DatabaseHelper(Context context) {
@@ -62,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(TABLE_CREATE);
         db.execSQL(TABLE_ORDER);
+        db.execSQL(TABLE_ADDRESS);
 
     }
 
@@ -155,6 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    //Functions for Table Orders
     public void insertDetailsToCart(Cart cart) {
 
         db = this.getWritableDatabase();
@@ -238,13 +259,137 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    //Functions for Table Address
+
+    public void insertAddress(Address mAddress) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String query = "select * from " + TABLE_NAME_ADDRESS;
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+
+        values.put(COL_ASL, count);
+        values.put(COL_AID, mAddress.getId());
+        values.put(COL_ANAME, mAddress.getdName());
+        values.put(COL_PIN, mAddress.getdPost());
+        values.put(COL_ADDRESS, mAddress.getdAddress());
+        values.put(COL_LANDMARK, mAddress.getdLand());
+        values.put(COL_CITY, mAddress.getdCity());
+        values.put(COL_STATE, mAddress.getdCity());
+        values.put(COL_PHONE, mAddress.getdPhone());
+        values.put(COL_EMAIL, mAddress.getdEmail());
+        db.insert(TABLE_NAME_ADDRESS, null, values);
+        db.close();
+    }
+
+    public void editAddress(Address mAddress,String sl) {
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select * from " + TABLE_NAME_ADDRESS;
+        ContentValues values = new ContentValues();
+        Cursor c = db.rawQuery(query, null);
+        String tab_sl;
+        if (c.moveToFirst()) {
+            do {
+                tab_sl = c.getString(0);
+                if (sl.equals(tab_sl)) {
+
+                    values.put(COL_ASL, sl);
+                    values.put(COL_AID, mAddress.getId());
+                    values.put(COL_ANAME, mAddress.getdName());
+                    values.put(COL_PIN, mAddress.getdPost());
+                    values.put(COL_ADDRESS, mAddress.getdAddress());
+                    values.put(COL_LANDMARK, mAddress.getdLand());
+                    values.put(COL_CITY, mAddress.getdCity());
+                    values.put(COL_STATE, mAddress.getdCity());
+                    values.put(COL_PHONE, mAddress.getdPhone());
+                    values.put(COL_EMAIL, mAddress.getdEmail());
+
+                    db.update(TABLE_NAME_ADDRESS,values,COL_ASL+" = " +sl,null);
+                    break;
+
+
+                }
+            } while (c.moveToNext());
+        }
+    }
+
+
+    public String searchAddress(String id) {
+
+        db = this.getReadableDatabase();
+        String query = "select * from " + TABLE_NAME_ADDRESS;
+        Cursor cursor = db.rawQuery(query, null);
+
+        String a, b;
+        b = "Not Found";
+        if (cursor.moveToFirst()) {
+
+            do {
+                a = cursor.getString(1);
+                if (a.equals(id)) {
+                    b = "Address Found";
+                    break;
+                }
+            }
+            while (cursor.moveToNext());
+        }
+        return b;
+    }
+
+
+    public ArrayList<Address> getTableAddress(String id) {
+
+
+        ArrayList<Address> items_table = new ArrayList<Address>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select * from " + TABLE_NAME_ADDRESS;
+        Cursor c = db.rawQuery(query, null);
+        String tab_id;
+        if (c.moveToFirst()) {
+            do {
+                tab_id = c.getString(1);
+                if (id.equals(tab_id)) {
+
+                    Address mAddress = new Address();
+                    mAddress.setCol_Sl(c.getString(c.getColumnIndex(COL_ASL)));
+                    mAddress.setId(c.getString(c.getColumnIndex(COL_AID)));
+                    mAddress.setdName(c.getString(c.getColumnIndex(COL_ANAME)));
+                    mAddress.setdPost(c.getString(c.getColumnIndex(COL_PIN)));
+                    mAddress.setdAddress(c.getString(c.getColumnIndex(COL_ADDRESS)));
+                    mAddress.setdLand(c.getString(c.getColumnIndex(COL_LANDMARK)));
+                    mAddress.setdCity(c.getString(c.getColumnIndex(COL_CITY)));
+                    mAddress.setdState(c.getString(c.getColumnIndex(COL_STATE)));
+                    mAddress.setdPhone(c.getString(c.getColumnIndex(COL_PHONE)));
+                    mAddress.setdEmail(c.getString(c.getColumnIndex(COL_EMAIL)));
+
+                    // adding to items_cart list
+                    items_table.add(mAddress);
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        return items_table;
+    }
+
+
+
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        String query = "DROP TABLE IF EXIXTS " + TABLE_NAME;
-        String query1 = "DROP TABLE IF EXIXTS " + TABLE_ORDER;
-        db.execSQL(query);
-        db.execSQL(query1);
-        onCreate(db);
+        if (newVersion > oldVersion) {
+            String query = "DROP TABLE IF EXIXTS " + TABLE_NAME;
+            String query1 = "DROP TABLE IF EXIXTS " + TABLE_ORDER;
+            String query2 = "DROP TABLE IF EXIXTS " + TABLE_NAME_ADDRESS;
+            db.execSQL(query);
+            db.execSQL(query1);
+            db.execSQL(query2);
+            onCreate(db);
+        }
+
     }
 }

@@ -99,14 +99,25 @@
         </activity>
         <activity
             android:name=".PricingDetails"
-            android:label="Price Details">
+            android:label="Price Details" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.ActivityCart" />
         </activity>
-        <activity android:name=".ShippingDetails"
+        <activity
+            android:name=".ShippingDetails"
             android:label="Shipping Details"
-            android:theme="@style/Shipping">
+            android:theme="@style/Shipping" >
+        </activity>
+        <activity
+            android:name=".EmptyCart"
+            android:label="Shopping Cart" >
+        </activity>
+        <activity android:name=".PaymentPage"
+            android:label=" ">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.project.yuvraj.PricingDetails" />
         </activity>
     </application>
 

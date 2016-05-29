@@ -1,10 +1,14 @@
 package com.project.yuvraj;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.project.yuvraj.database.DatabaseHelper;
+import com.project.yuvraj.myapplication.MyApplication;
 
 import java.text.DecimalFormat;
 
@@ -13,7 +17,12 @@ public class PricingDetails extends AppCompatActivity {
     int cartTotal,delivery, list;
     double vat,totalPay;
     String v,p;
+    int sumTotal;
     TextView textViewCart,textViewVat,textViewdelivery,textViewfinal,textViewitems,textViewtotal;
+
+    MyApplication myApplication;
+    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+    String id;
 
 
     @Override
@@ -30,17 +39,30 @@ public class PricingDetails extends AppCompatActivity {
         DecimalFormat df=new DecimalFormat("0");
         v = df.format(vat);
         p = df.format(totalPay);
+        sumTotal = Integer.parseInt(p);
+        //if total is > 1000, delivery = Free
+        if (cartTotal>1000){
+
+            textViewdelivery.setText("FREE");
+            textViewdelivery.setTextColor(Color.parseColor("#4CAF50"));
+            sumTotal = sumTotal - delivery;
+        }
+        else{
+
+            textViewdelivery.setText("Rs: "+delivery);
+        }
         setPrice();
+        myApplication = (MyApplication) getApplication();
+        myApplication.saveToken("Total",String.valueOf(sumTotal));
     }
 
     private void setPrice() {
 
         textViewitems.setText("Items (" + list + ")");
-        textViewtotal.setText("Amount : Rs " + p);
+        textViewtotal.setText("Amount : Rs " + sumTotal);
         textViewCart.setText("Rs: " + cartTotal);
         textViewVat.setText("Rs: "+v);
-        textViewdelivery.setText("Rs: "+delivery);
-        textViewfinal.setText("Rs: " + p);
+        textViewfinal.setText("Rs: " + sumTotal);
     }
 
     private void init() {
@@ -51,13 +73,23 @@ public class PricingDetails extends AppCompatActivity {
         textViewVat = (TextView) findViewById(R.id.vatPriceTotal);
         textViewdelivery = (TextView) findViewById(R.id.deliveryPriceTotal);
         textViewfinal = (TextView) findViewById(R.id.finalPriceTotal);
+
+        myApplication = (MyApplication) getApplication();
+        id = myApplication.getSavedValue("Id");
     }
 
     public void checkout(View v){
 
-        Intent intent = new Intent(PricingDetails.this,ShippingDetails.class);
-        startActivity(intent);
+        String addressStatus = databaseHelper.searchAddress(id);
 
-
+        if (addressStatus.equals("Not Found")){
+            Intent intent = new Intent(PricingDetails.this,ShippingDetails.class);
+            intent.putExtra("Status","New");
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(PricingDetails.this,PaymentPage.class);
+            startActivity(intent);
+        }
     }
 }

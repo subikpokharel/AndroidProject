@@ -4,7 +4,10 @@ package com.project.yuvraj;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
@@ -16,27 +19,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.project.yuvraj.database.DatabaseHelper;
 import com.project.yuvraj.myapplication.MyApplication;
+import com.project.yuvraj.parsing.Cart;
+
+import java.util.ArrayList;
 
 public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String email, name;
-    MyApplication myApplication;
 
+    MyApplication myApplication;
+    CoordinatorLayout coordinatorLayout;
+    String id;
+    TextView cart_count;
+    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+    ArrayList<Cart> cartArrayList;
+    int listSize;
+    boolean ItemOnCart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
+//Set user name and email in the navigation drawer
+
+        myApplication = (MyApplication) getApplication();
+        String email = myApplication.getSavedValue("EmailS");
+        String name = myApplication.getSavedValue("NameS");
+        id = myApplication.getSavedValue("Id");
+        cartArrayList = databaseHelper.getOrderDetails(id);
+        listSize = cartArrayList.size();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coLayout);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -44,6 +67,14 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        cart_count=(TextView) MenuItemCompat.getActionView(navigationView.getMenu().
+                findItem(R.id.nav_cart));
+
+        if (listSize != 0){
+            initializeCountDrawer();
+        }
+
+
 
 
         //Initial fragment
@@ -60,21 +91,21 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
 //Set user name and email in the navigation drawer
 
-        myApplication = (MyApplication) getApplication();
-        String email = myApplication.getSavedValue("EmailS");
-        String name = myApplication.getSavedValue("NameS");
-    //    String id = myApplication.getSavedValue("Id");
-
-     //   Toast.makeText(getBaseContext(), name+ "   "+ email+"   "+id, Toast.LENGTH_LONG).show();
-
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main_page);
         TextView nav_user = (TextView) headerView.findViewById(R.id.NVusername);
         TextView nav_email = (TextView) headerView.findViewById(R.id.NVemail);
         nav_email.setText(email);
         nav_user.setText(name);
 
-        //       Toast.makeText(getBaseContext(), name+ "   "+ email, Toast.LENGTH_LONG).show();
 
+    }
+
+    private void initializeCountDrawer(){
+        //Gravity property aligns the text
+        cart_count.setGravity(Gravity.CENTER_VERTICAL);
+        cart_count.setTypeface(null, Typeface.BOLD);
+        cart_count.setTextColor(getResources().getColor(R.color.colorAccent));
+        cart_count.setText(String.valueOf(listSize));
 
     }
 
@@ -92,9 +123,38 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.main_page, menu);
-        return true;
+        MenuItem item1 = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(item1, R.layout.cart_notification);
+        coordinatorLayout = (CoordinatorLayout) MenuItemCompat.getActionView(item1);
+        TextView textView = (TextView) coordinatorLayout.findViewById(R.id.badge_notification_1);
+        Button btn = (Button) coordinatorLayout.findViewById(R.id.buttonCart);
+
+        if (listSize == 0){
+            textView.setVisibility(View.GONE);
+            ItemOnCart = false;
+        }else {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(String.valueOf(listSize));
+            ItemOnCart = true;
+        }
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ItemOnCart){
+                    Intent i = new Intent(getApplicationContext(), ActivityCart.class);
+                    startActivity(i);
+                }else {
+                    Intent i = new Intent(getApplicationContext(), EmptyCart.class);
+                    startActivity(i);
+                }
+
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

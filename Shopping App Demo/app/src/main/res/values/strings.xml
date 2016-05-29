@@ -27,5 +27,11 @@
     <string name="land">Landmark</string>
     <string name="email">Email</string>
     <string name="deliver">Deliver to this address</string>
+    <string name="emptyCart">Your Cart is Empty</string>
+    <string name="pointer">&#xe01d;</string>
+    <string name="del">Delivery Address</string>
+    <string name="pay">Payable amount on delivery</string>
+    <string name="cod">Cash On Delivery</string>
+    <string name="placeOrder">Place Order</string>
 
 </resources>
