@@ -206,8 +206,11 @@ public class Product extends AppCompatActivity {
     //    return;
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 
     //For top right return to Home button
 

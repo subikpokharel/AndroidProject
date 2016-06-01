@@ -11,7 +11,7 @@
     <string name="hello">Welcome to the Famous App... What we care about is our Customers.</string>
     <string name="ingredients">Ingredients:</string>
 
-    <string name="more">" Tax : 14.5% VAT/CST is applicable. \n           Delivery charges applicable. "</string>
+    <string name="more">" Tax : 14.5% VAT/CST is applicable. \n           Delivery charges applicable on order below Rs.1000. "</string>
     <string name="price">Price Details</string>
     <string name="rs">Rs</string>
     <string name="moreInfo">More Information</string>
@@ -33,5 +33,9 @@
     <string name="pay">Payable amount on delivery</string>
     <string name="cod">Cash On Delivery</string>
     <string name="placeOrder">Place Order</string>
+    <string name="payment">PAYMENT SUCCESSFUL</string>
+    <string name="thank">Thank You,</string>
+    <string name="thank1">Your order has been placed.</string>
+    <string name="continueShopping">CONTINUE SHOPPING</string>
 
 </resources>

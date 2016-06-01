@@ -36,4 +36,13 @@ public class EmptyCart extends AppCompatActivity {
         Intent i = new Intent(EmptyCart.this,SelectItem.class);
         startActivity(i);
     }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent i = new Intent(EmptyCart.this, MainPageActivity.class);
+        startActivity(i);
+        finish();
+        super.onBackPressed();
+    }
 }

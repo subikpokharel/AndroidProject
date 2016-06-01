@@ -96,8 +96,11 @@ public class PaymentPage extends AppCompatActivity {
 
         if ((cbCod).isChecked()){
             Toast.makeText(getApplicationContext(),"Check Box Clicked",Toast.LENGTH_LONG).show();
+            Intent i = new Intent(PaymentPage.this,OrderPlaced.class);
+            startActivity(i);
+            finish();
         }else {
-            Toast.makeText(getApplicationContext(),"Check Box Not Clicked",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext()," Please Select a Payment Option ",Toast.LENGTH_LONG).show();
         }
 
     }

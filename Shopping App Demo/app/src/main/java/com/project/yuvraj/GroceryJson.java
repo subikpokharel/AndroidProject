@@ -101,6 +101,12 @@ public class GroceryJson extends AppCompatActivity{
         return json;
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
+
 
 
     //For top right return to Home button

@@ -22,7 +22,7 @@ public class SelectItem extends AppCompatActivity implements AdapterView.OnItemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_item);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView = (ListView) findViewById(R.id.listView);
  //       ArrayList<String> epl = new ArrayList<>();
         ArrayAdapter<String> aStringAdapter = new ArrayAdapter<String>(
@@ -50,6 +50,12 @@ public class SelectItem extends AppCompatActivity implements AdapterView.OnItemC
             Toast.makeText(SelectItem.this,  "  Clicked Food ", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 
     //For top right return to Home button

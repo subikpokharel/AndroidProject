@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.yuvraj.adapters.MyCartAdapter;
 import com.project.yuvraj.database.DatabaseHelper;
@@ -23,9 +24,9 @@ public class ActivityCart extends AppCompatActivity {
     MyApplication myApplication;
     RecyclerView mRecyclerView;
     TextView usr, itemcount, totaldisplay;
-    int sum = 0,delivery = 100,totalList = 0;
-    String totalPay;
-    double rate = 0.145, totalVat =0,sumTotal=0;
+    int sum = 0, delivery = 100, totalList = 0;
+    String totalPay, id;
+    double rate = 0.145, totalVat = 0, sumTotal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +35,35 @@ public class ActivityCart extends AppCompatActivity {
 
 
         usr = (TextView) findViewById(R.id.userName);
-        itemcount = (TextView) findViewById(R.id.itemCount);
-        totaldisplay = (TextView) findViewById(R.id.totalDisplay);
+      /*  itemcount = (TextView) findViewById(R.id.itemCount);
+        totaldisplay = (TextView) findViewById(R.id.totalDisplay);*/
 
         myApplication = (MyApplication) getApplication();
-        String id = myApplication.getSavedValue("Id");
+        id = myApplication.getSavedValue("Id");
         String user = myApplication.getSavedValue("NameS");
         String final_user = "Hello" + " " + user;
         usr.setText(final_user);
 
+        calculate();
+
+        bindCartData();
+
+    }
+
+    private void bindCartData() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.cartRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        MyCartAdapter mMyCartAdapter = new MyCartAdapter(this, cartArrayList, id);
+        mRecyclerView.setAdapter(mMyCartAdapter);
+    }
+
+    private void calculate() {
+
         cartArrayList = databaseHelper.getOrderDetails(id);
         totalList = cartArrayList.size();
 
-        itemcount.setText("Items (" + totalList + ")");
+        //     itemcount.setText("Items (" + totalList + ")");
+
 
         for (int i = 0; i < totalList; i++) {
             Cart mcart = cartArrayList.get(i);
@@ -60,31 +77,41 @@ public class ActivityCart extends AppCompatActivity {
             sum = sum + total;
         }
 
-        totalVat = (rate*sum);
+        totalVat = (rate * sum);
         sumTotal = sum + totalVat + delivery;
         totalPay = String.valueOf(sumTotal);
-        totaldisplay.setText("Cart Amount : Rs " + sum);
+        //      totaldisplay.setText("Cart Amount : Rs " + sum);
 
-        bindCartData();
 
     }
 
-    private void bindCartData() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.cartRecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MyCartAdapter mMyCartAdapter = new MyCartAdapter(this, cartArrayList);
-        mRecyclerView.setAdapter(mMyCartAdapter);
-    }
+    @Override
+    public void onBackPressed() {
 
-    public void showPricing(View v){
-
-        Intent i = new Intent(ActivityCart.this,PricingDetails.class);
-        i.putExtra("CartTotal",sum);
-        i.putExtra("Vat",totalVat);
-        i.putExtra("Delivery",delivery);
-        i.putExtra("Total",sumTotal);
-        i.putExtra("Items",totalList);
+        Intent i = new Intent(ActivityCart.this, MainPageActivity.class);
         startActivity(i);
+        finish();
+        super.onBackPressed();
+    }
+
+    public void showPricing(View v) {
+
+        calculate();
+        if (totalList == 0) {
+
+            Intent i = new Intent(getApplicationContext(), EmptyCart.class);
+            startActivity(i);
+            finish();
+        } else {
+
+            Intent i = new Intent(ActivityCart.this, PricingDetails.class);
+            i.putExtra("CartTotal", sum);
+            i.putExtra("Vat", totalVat);
+            i.putExtra("Delivery", delivery);
+            i.putExtra("Total", sumTotal);
+            i.putExtra("Items", totalList);
+            startActivity(i);
+        }
 
     }
 }

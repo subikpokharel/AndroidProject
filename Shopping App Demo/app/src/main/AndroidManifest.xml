@@ -113,11 +113,18 @@
             android:name=".EmptyCart"
             android:label="Shopping Cart" >
         </activity>
-        <activity android:name=".PaymentPage"
-            android:label=" ">
+        <activity
+            android:name=".PaymentPage"
+            android:label=" " >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.PricingDetails" />
+        </activity>
+        <activity android:name=".OrderPlaced"
+            android:label=" ">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.project.yuvraj.MainPageActivity" />
         </activity>
     </application>
 

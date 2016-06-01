@@ -247,7 +247,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         SQLiteDatabase database = this.getWritableDatabase();
                         String query = "UPDATE " + TABLE_CART + " SET " + COL_QUANTITY + " = " + total + " where " + COL_SL + " = " + sl;
                         database.execSQL(query);
-                        Toast.makeText(context, "New Total " + total, Toast.LENGTH_LONG).show();
                         a = true;
                         break;
                     }
@@ -256,6 +255,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
         return a;
+    }
+
+    public void removeItem(String id, String name, Context context){
+
+        String selectQuery = "SELECT  * FROM " + TABLE_CART;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        String tab_id, tab_name, sl;
+        if (c.moveToFirst()){
+            do {
+                tab_id = c.getString(1);
+                if (id.equals(tab_id)){
+                    tab_name = c.getString(3);
+                    if (name.equals(tab_name)){
+                        sl = c.getString(0);
+                        SQLiteDatabase database = this.getWritableDatabase();
+                        database.delete(TABLE_CART,COL_SL+" = " +sl,null);
+                        break;
+                    }
+                }
+            }while (c.moveToNext());
+        }
     }
 
 
