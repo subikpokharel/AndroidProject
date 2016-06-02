@@ -24,7 +24,7 @@ public class ActivityCart extends AppCompatActivity {
     MyApplication myApplication;
     RecyclerView mRecyclerView;
     TextView usr, itemcount, totaldisplay;
-    int sum = 0, delivery = 100, totalList = 0;
+    int sum = 0, delivery = 0, totalList = 0, deliverycharge = 17;
     String totalPay, id;
     double rate = 0.145, totalVat = 0, sumTotal = 0;
 
@@ -35,8 +35,6 @@ public class ActivityCart extends AppCompatActivity {
 
 
         usr = (TextView) findViewById(R.id.userName);
-      /*  itemcount = (TextView) findViewById(R.id.itemCount);
-        totaldisplay = (TextView) findViewById(R.id.totalDisplay);*/
 
         myApplication = (MyApplication) getApplication();
         id = myApplication.getSavedValue("Id");
@@ -62,20 +60,27 @@ public class ActivityCart extends AppCompatActivity {
         cartArrayList = databaseHelper.getOrderDetails(id);
         totalList = cartArrayList.size();
 
-        //     itemcount.setText("Items (" + totalList + ")");
-
-
+        sum = 0;
+        int totalItems = 0;
         for (int i = 0; i < totalList; i++) {
+
+
             Cart mcart = cartArrayList.get(i);
             String abc = mcart.getPrice();
             String quant = mcart.getQuantity();
             int quan = Integer.parseInt(quant);
+
+            totalItems = totalItems + quan;
+
             String remove = "Rs ";
             String pr = abc.replace(remove, "");
+
             int money = Integer.parseInt(pr);
             int total = quan * money;
             sum = sum + total;
+            Toast.makeText(getApplicationContext(),"Total Items = "+totalItems,Toast.LENGTH_LONG).show();
         }
+        delivery = deliverycharge * totalItems;
 
         totalVat = (rate * sum);
         sumTotal = sum + totalVat + delivery;
