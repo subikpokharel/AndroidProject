@@ -1,5 +1,7 @@
 package com.project.yuvraj.parsing;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Lenovo on 5/17/2016.
  */
@@ -11,6 +13,10 @@ public class Cart {
     String quantity;
     String name;
     String sl;
+    String date;
+
+
+
 
   /*  public Cart(String id, String url, String quantity, String price, String name) {
         this.id = id;
@@ -67,5 +73,13 @@ public class Cart {
 
     public void setSl(String sl) {
         this.sl = sl;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

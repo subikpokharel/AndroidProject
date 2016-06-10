@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.project.yuvraj" >
+    package="com.project.yuvraj">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -12,10 +12,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/NoActionBar" >
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +37,7 @@
         <activity
             android:name=".SelectItem"
             android:label="Select Categories"
-            android:parentActivityName=".MainPageActivity" >
+            android:parentActivityName=".MainPageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.MainPageActivity" />
@@ -45,7 +45,7 @@
         <activity
             android:name=".GroceryJson"
             android:label="Grocery Items"
-            android:parentActivityName=".SelectItem" >
+            android:parentActivityName=".SelectItem">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.SelectItem" />
@@ -53,7 +53,7 @@
         <activity
             android:name=".FoodItems"
             android:label="Food Categories"
-            android:parentActivityName=".SelectItem" >
+            android:parentActivityName=".SelectItem">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.SelectItem" />
@@ -61,7 +61,7 @@
         <activity
             android:name=".VegetarianJson"
             android:label="Vegetarian Categories"
-            android:parentActivityName=".FoodItems" >
+            android:parentActivityName=".FoodItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.FoodItems" />
@@ -69,37 +69,37 @@
         <activity
             android:name=".NonVegetarianJson"
             android:label="Non Vegetarian Categories"
-            android:parentActivityName=".FoodItems" >
+            android:parentActivityName=".FoodItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.FoodItems" />
->
+            >
         </activity>
         <activity
             android:name=".Product"
             android:label="Products"
-            android:parentActivityName=".SelectItem" >
+            android:parentActivityName=".SelectItem">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.SelectItem" />
         </activity>
         <activity
             android:name=".FinalProduct"
-            android:theme="@style/Subik" >
+            android:theme="@style/Subik">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.SelectItem" />
         </activity>
         <activity
             android:name=".ActivityCart"
-            android:label="Shopping Cart" >
+            android:label="Shopping Cart">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.SelectItem" />
         </activity>
         <activity
             android:name=".PricingDetails"
-            android:label="Price Details" >
+            android:label="Price Details">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.ActivityCart" />
@@ -107,21 +107,27 @@
         <activity
             android:name=".ShippingDetails"
             android:label="Shipping Details"
-            android:theme="@style/Shipping" >
-        </activity>
+            android:theme="@style/Shipping"/>
         <activity
             android:name=".EmptyCart"
-            android:label="Shopping Cart" >
-        </activity>
+            android:label="Shopping Cart"/>
         <activity
             android:name=".PaymentPage"
-            android:label=" " >
+            android:label=" ">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.PricingDetails" />
         </activity>
-        <activity android:name=".OrderPlaced"
+        <activity
+            android:name=".OrderPlaced"
             android:label=" ">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.project.yuvraj.MainPageActivity" />
+        </activity>
+        <activity
+            android:name=".MyOrders"
+            android:label=" My Orders">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.project.yuvraj.MainPageActivity" />

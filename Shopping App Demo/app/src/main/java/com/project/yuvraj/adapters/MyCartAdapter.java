@@ -33,19 +33,36 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.CustomView
     DatabaseHelper mdatabaseHelper;
     MyCartAdapter myCartAdapter;
 
+    OnPriceChangeListner onPriceChangeListner;
+
     public MyCartAdapter(Context context, ArrayList<Cart> list, String id) {
 
         this.list = list;
         this.mContext = context;
         this.id = id;
+        onPriceChangeListner= (OnPriceChangeListner) context;
 
     }
 
     @Override
     public MyCartAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_cart, parent, false);
-        CustomViewHolder cvh = new CustomViewHolder(v);
-        return cvh;
+        if(viewType==100) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_cart, parent, false);
+            CustomViewHolder cvh = new CustomViewHolder(v);
+            return cvh;
+        }else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_cart, parent, false);
+            CustomViewHolder cvh = new CustomViewHolder(v);
+            return  cvh;
+        }
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position==list.size())
+        return 100;
+        else return 102;
     }
 
     @Override
@@ -88,9 +105,11 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.CustomView
                 public void onClick(View v) {
 
                     Cart mCart = list.get(getLayoutPosition());
-                    String name = mCart.getName();
-                    String quantity = mCart.getQuantity();
-                    Toast.makeText(v.getContext(), "Requested to Edit " + name, Toast.LENGTH_SHORT).show();
+                    int position = getAdapterPosition();
+                    //String name = mCart.getName();
+                    //String quantity = mCart.getQuantity();
+                   // Toast.makeText(v.getContext(), "Requested to Edit " + name, Toast.LENGTH_SHORT).show();
+                    onPriceChangeListner.showEditDialog(mCart,position);
                 }
             });
 
@@ -103,11 +122,6 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.CustomView
                     mdatabaseHelper.removeItem(id, name, v.getContext());
                     int size = getAdapterPosition();
                     removeItem(size);
-                   /* if (list.size() == 0) {
-                        Intent i = new Intent(v.getContext(), EmptyCart.class);
-                        startActivity(i);
-
-                    }*/
                 }
             });
 
@@ -117,5 +131,17 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.CustomView
     public void removeItem(int position){
         this.list.remove(position);
         notifyDataSetChanged();
+        if(onPriceChangeListner!=null){
+            onPriceChangeListner.onListChnaged();
+        }
+    }
+
+
+
+
+
+    public interface OnPriceChangeListner{
+        void onListChnaged();
+        void showEditDialog(Cart mCart, int position);
     }
 }

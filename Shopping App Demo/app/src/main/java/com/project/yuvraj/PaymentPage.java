@@ -16,11 +16,15 @@ import android.widget.Toast;
 import com.project.yuvraj.database.DatabaseHelper;
 import com.project.yuvraj.myapplication.MyApplication;
 import com.project.yuvraj.parsing.Address;
+import com.project.yuvraj.parsing.Cart;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class PaymentPage extends AppCompatActivity {
 
+    ArrayList<Cart> cartArrayList;
     ArrayList<Address> mAddress;
     MyApplication myApplication;
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
@@ -52,8 +56,8 @@ public class PaymentPage extends AppCompatActivity {
         edit_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PaymentPage.this,ShippingDetails.class);
-                intent.putExtra("Status","Old");
+                Intent intent = new Intent(PaymentPage.this, ShippingDetails.class);
+                intent.putExtra("Status", "Old");
                 startActivity(intent);
             }
         });
@@ -92,15 +96,45 @@ public class PaymentPage extends AppCompatActivity {
         tvPhone.setText(tab_phone);
     }
 
-    public void placeOrder(View view){
+    public void placeOrder(View view) {
 
-        if ((cbCod).isChecked()){
-            Toast.makeText(getApplicationContext(),"Check Box Clicked",Toast.LENGTH_LONG).show();
-            Intent i = new Intent(PaymentPage.this,OrderPlaced.class);
+        if ((cbCod).isChecked()) {
+           // Toast.makeText(getApplicationContext(), "Check Box Clicked", Toast.LENGTH_LONG).show();
+
+            //add data to My Orders
+            cartArrayList = databaseHelper.getOrderDetails(id);
+            int totalList = cartArrayList.size();
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+            String formattedDate = df.format(c.getTime());
+
+            for (int i = 0; i < totalList; i++) {
+
+                Cart mcart = cartArrayList.get(i);
+
+
+                String img = mcart.getUrl();
+                String title = mcart.getName();
+                String price = mcart.getPrice();
+                String quantity = mcart.getQuantity();
+
+                mcart.setId(id);
+                mcart.setUrl(img);
+                mcart.setName(title);
+                mcart.setPrice(price);
+                mcart.setQuantity(quantity);
+                mcart.setDate(formattedDate);
+                databaseHelper.insertDetailsMyOrders(mcart);
+            }
+
+            //delete data from database
+            databaseHelper.orderPlaced(id);
+
+            Intent i = new Intent(PaymentPage.this, OrderPlaced.class);
             startActivity(i);
             finish();
-        }else {
-            Toast.makeText(getApplicationContext()," Please Select a Payment Option ",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), " Please Select a Payment Option ", Toast.LENGTH_LONG).show();
         }
 
     }
