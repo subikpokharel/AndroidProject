@@ -54,6 +54,7 @@ public class PricingDetails extends AppCompatActivity {
         setPrice();
         myApplication = (MyApplication) getApplication();
         myApplication.saveToken("Total",String.valueOf(sumTotal));
+        myApplication.saveToken("Items",String.valueOf(list));
     }
 
     private void setPrice() {

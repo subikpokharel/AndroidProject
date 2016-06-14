@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.project.yuvraj.parsing.Address;
 import com.project.yuvraj.parsing.Cart;
 import com.project.yuvraj.parsing.Details;
+import com.project.yuvraj.parsing.OrderParshing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_OPRICE = "price";
     private static final String COL_OQUANTITY = "quantity";
     private static final String COL_DATE = "orderdate";
+    private static final String COL_ORDERID = "orderid";
+
 
     //Table for Address
     private static final String TABLE_NAME_ADDRESS = "tbaddress";
@@ -62,6 +65,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_STATE = "state";
     private static final String COL_PHONE = "phone";
     private static final String COL_EMAIL = "email";
+
+    //Table for User Id
+    private static final String TABLE_USERORDER = "userorder";
+    private static final String COL_USL = "sl";
+    private static final String COL_UID = "id";
+    private static final String COL_UORDERID = "orderid";
+    private static final String COL_UDATE = "date";
+    private static final String COL_TOTAL = "total";
+    private static final String COL_ITEMS = "items";
 
 
     SQLiteDatabase db;
@@ -84,7 +96,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Create table Placed Order
     private static final String TABLE_ORDERMY = "create table placedorders (sl integer primary key not null ,id not null ," +
-            "url text not null, name text not null, price text not null, quantity text not null, orderdate text not null);";
+            "url text not null, name text not null, price text not null, quantity text not null, orderdate text not null,"+
+            "orderid text not null);";
+
+    //Create table user order
+    private static final String TABLE_USEROID = "create table userorder (sl integer primary key not null ,id not null ," +
+            "orderid text not null, date text not null, total text not null, items text not null);";
 
 
     public DatabaseHelper(Context context) {
@@ -99,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_ORDER);
         db.execSQL(TABLE_ADDRESS);
         db.execSQL(TABLE_ORDERMY);
+        db.execSQL(TABLE_USEROID);
 
     }
 
@@ -358,8 +376,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_OPRICE, mcart.getPrice());
         values.put(COL_OQUANTITY, mcart.getQuantity());
         values.put(COL_DATE, mcart.getDate());
+        values.put(COL_ORDERID, mcart.getOrderid());
         db.insert(TABLE_PLACED, null, values);
         db.close();
+    }
+
+    public ArrayList<Cart> getMyorder(String id, String orderId) {
+
+        ArrayList<Cart> items_cart = new ArrayList<Cart>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_PLACED+ " WHERE orderid = "+orderId;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        String tab_id;
+        if (c.moveToFirst()) {
+            do {
+                tab_id = c.getString(1);
+                if (id.equals(tab_id)) {
+
+
+                    Cart cart = new Cart();
+                    cart.setSl(c.getString(c.getColumnIndex(COL_OSL)));
+                    cart.setId(c.getString(c.getColumnIndex(COL_OID)));
+                    cart.setUrl(c.getString(c.getColumnIndex(COL_OIMG)));
+                    cart.setName(c.getString(c.getColumnIndex(COL_ONAME)));
+                    cart.setPrice(c.getString(c.getColumnIndex(COL_OPRICE)));
+                    cart.setQuantity(c.getString(c.getColumnIndex(COL_OQUANTITY)));
+                    cart.setDate(c.getString(c.getColumnIndex(COL_DATE)));
+                    // adding to items_cart list
+                    items_cart.add(cart);
+                }
+            } while (c.moveToNext());
+        }
+        return items_cart;
     }
 
 
@@ -481,6 +530,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    //Functions for USER ORDER ID TABLE
+
+    public void insertorderId(String id, String orderId,String date, String total, String items) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String query = "select * from " + TABLE_USERORDER;
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+
+        values.put(COL_USL, count);
+        values.put(COL_UID, id);
+        values.put(COL_UORDERID, orderId);
+        values.put(COL_UDATE, date);
+        values.put(COL_TOTAL, total);
+        values.put(COL_ITEMS,items);
+        db.insert(TABLE_USERORDER, null, values);
+        db.close();
+    }
+
+    public ArrayList<OrderParshing> OrderDetails(String id){
+
+        ArrayList<OrderParshing> items_table = new ArrayList<OrderParshing>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select * from " + TABLE_USERORDER;
+        Cursor c = db.rawQuery(query, null);
+        String tab_id;
+        if (c.moveToFirst()) {
+            do {
+                tab_id = c.getString(1);
+                if (id.equals(tab_id)) {
+
+                    OrderParshing orderParshing = new OrderParshing();
+                    orderParshing.setUser_id(c.getString(c.getColumnIndex(COL_UID)));
+                    orderParshing.setOrder_id(c.getString(c.getColumnIndex(COL_UORDERID)));
+                    orderParshing.setOrder_date(c.getString(c.getColumnIndex(COL_UDATE)));
+                    orderParshing.setOrder_amount(c.getString(c.getColumnIndex(COL_TOTAL)));
+                    orderParshing.setCount(c.getString(c.getColumnIndex(COL_ITEMS)));
+
+                    // adding to items_cart list
+                    items_table.add(orderParshing);
+                }
+            } while (c.moveToNext());
+        }
+        return items_table;
+
+    }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -490,11 +589,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String query1 = "DROP TABLE IF EXISTS " + TABLE_ORDER;
             String query2 = "DROP TABLE IF EXISTS " + TABLE_NAME_ADDRESS;
             String query3 = "DROP TABLE IF EXISTS " + TABLE_PLACED;
+            String query4 = "DROP TABLE IF EXISTS " + TABLE_USERORDER;
 
             db.execSQL(query);
             db.execSQL(query1);
             db.execSQL(query2);
             db.execSQL(query3);
+            db.execSQL(query4);
             onCreate(db);
         }
 

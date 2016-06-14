@@ -14,6 +14,7 @@ public class Cart {
     String name;
     String sl;
     String date;
+    String orderid;
 
 
 
@@ -81,5 +82,14 @@ public class Cart {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+
+    public String getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(String orderid) {
+        this.orderid = orderid;
     }
 }

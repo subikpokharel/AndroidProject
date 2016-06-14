@@ -85,7 +85,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.CustomView
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtName,txtPrice,txtQuantity;
+        public TextView txtName, txtPrice, txtQuantity;
         public ImageView imageView;
         public RelativeLayout relativeLayoutEdit, relativeLayoutRemove;
 
@@ -108,8 +108,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.CustomView
                     int position = getAdapterPosition();
                     //String name = mCart.getName();
                     //String quantity = mCart.getQuantity();
-                   // Toast.makeText(v.getContext(), "Requested to Edit " + name, Toast.LENGTH_SHORT).show();
-                    onPriceChangeListner.showEditDialog(mCart,position);
+                    // Toast.makeText(v.getContext(), "Requested to Edit " + name, Toast.LENGTH_SHORT).show();
+                    onPriceChangeListner.showEditDialog(mCart, position);
                 }
             });
 

@@ -33,6 +33,7 @@ public class PaymentPage extends AppCompatActivity {
     TextView tvAddress, tvCity, tvPin, tvName, tvPhone, tvPrice;
     ImageView edit_address;
     CheckBox cbCod;
+    String orderid,formattedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,9 @@ public class PaymentPage extends AppCompatActivity {
         setContentView(R.layout.activity_payment_page);
 
         init();
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        formattedDate = df.format(c.getTime());
 
         myApplication = (MyApplication) getApplication();
         id = myApplication.getSavedValue("Id");
@@ -104,9 +108,7 @@ public class PaymentPage extends AppCompatActivity {
             //add data to My Orders
             cartArrayList = databaseHelper.getOrderDetails(id);
             int totalList = cartArrayList.size();
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-            String formattedDate = df.format(c.getTime());
+            generateid();
 
             for (int i = 0; i < totalList; i++) {
 
@@ -124,6 +126,7 @@ public class PaymentPage extends AppCompatActivity {
                 mcart.setPrice(price);
                 mcart.setQuantity(quantity);
                 mcart.setDate(formattedDate);
+                mcart.setOrderid(orderid);
                 databaseHelper.insertDetailsMyOrders(mcart);
             }
 
@@ -136,6 +139,19 @@ public class PaymentPage extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), " Please Select a Payment Option ", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    public void generateid(){
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyddmmss");
+        orderid = df.format(c.getTime());
+        myApplication.saveToken("OrderId", orderid);
+        String totalPay = myApplication.getSavedValue("Total");
+        String items = myApplication.getSavedValue("Items");
+
+        databaseHelper.insertorderId(id,orderid,formattedDate,totalPay,items);
 
     }
 }

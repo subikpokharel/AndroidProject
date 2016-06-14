@@ -37,5 +37,6 @@
     <string name="thank">Thank You,</string>
     <string name="thank1">Your order has been placed.</string>
     <string name="continueShopping">CONTINUE SHOPPING</string>
+    <string name="orderno">Your Order No: </string>
 
 </resources>

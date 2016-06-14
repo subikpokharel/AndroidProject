@@ -13,13 +13,25 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.TextView;
+
+import com.project.yuvraj.myapplication.MyApplication;
 
 public class OrderPlaced extends AppCompatActivity {
+
+    TextView orderNo;
+    MyApplication myApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_placed);
+        orderNo = (TextView) findViewById(R.id.orderNo);
+
+        myApplication = (MyApplication) getApplication();
+        String orderId = myApplication.getSavedValue("OrderId");
+        orderNo.setText(orderId);
+
         sendNotification("Click to View Order");
     }
 
@@ -31,7 +43,7 @@ public class OrderPlaced extends AppCompatActivity {
     }
 
     private void sendNotification(String message) {
-        Intent intent = new Intent(this, MainPageActivity.class);
+        Intent intent = new Intent(this, ClickedNotification.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

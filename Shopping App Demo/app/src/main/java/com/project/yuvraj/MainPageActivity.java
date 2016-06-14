@@ -29,7 +29,9 @@ import com.project.yuvraj.database.DatabaseHelper;
 import com.project.yuvraj.myapplication.MyApplication;
 import com.project.yuvraj.parsing.Cart;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,6 +48,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+
 
 //Set user name and email in the navigation drawer
 
@@ -204,7 +208,12 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             Intent i = new Intent(getApplicationContext(), ActivityCart.class);
             startActivity(i);
 
-        } else if (id == R.id.nav_logout) {
+        }
+        else if (id == R.id.nav_orders ) {
+            Intent i = new Intent(getApplicationContext(), RecentOrders.class);
+            startActivity(i);
+
+        }else if (id == R.id.nav_logout) {
 
             AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(MainPageActivity.this);
 

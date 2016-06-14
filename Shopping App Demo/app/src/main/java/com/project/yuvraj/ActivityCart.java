@@ -51,7 +51,7 @@ public class ActivityCart extends AppCompatActivity implements MyCartAdapter.OnP
 
         Toast.makeText(getApplicationContext(),"Time "+c.getTime(),Toast.LENGTH_SHORT).show();*/
 
-        Date d = new Date();
+       /* Date d = new Date();
         CharSequence s = DateFormat.format("hh:mm:ss", d.getTime());
         Toast.makeText(getApplicationContext(),"Time "+s,Toast.LENGTH_LONG).show();
 
@@ -59,7 +59,7 @@ public class ActivityCart extends AppCompatActivity implements MyCartAdapter.OnP
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c.getTime());
 
-        Toast.makeText(getApplicationContext(),"Date "+formattedDate,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Date "+formattedDate,Toast.LENGTH_LONG).show();*/
 
         calculate();
 
