@@ -30,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
 //Get all the views from the  activity_login.xml --> done under init function
         init();
 
-        editEmail.setText("s@g.c");
-        editPassword.setText("aaaa");
+   /*     editEmail.setText("s@g.c");
+        editPassword.setText("aaaa");*/
 
 
         //On Login Click
